@@ -1,15 +1,37 @@
 import React, { useState } from "react";
 import blogService from "./../services/blogs";
 
-const BlogForm = ({ blogs, setBlogs }) => {
+const BlogForm = ({
+	blogs,
+	setBlogs,
+	setNotificationMessage,
+	setIsErrorMessage,
+}) => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
 
-	const newBlogHandler = async () => {
+	const newBlogHandler = async (e) => {
+		e.preventDefault();
 		const newBlog = { title, author, url };
 		const createdBlog = await blogService.create(newBlog);
-		setBlogs([createdBlog, ...blogs]);
+		if (createdBlog.error) {
+			setNotificationMessage(createdBlog.error);
+			setIsErrorMessage(true);
+			setTimeout(() => {
+				setNotificationMessage("");
+				setIsErrorMessage(false);
+			}, 5000);
+		} else {
+			setBlogs([createdBlog, ...blogs]);
+			setNotificationMessage(`a new blog ${title} by ${author} added`);
+			setTimeout(() => {
+				setNotificationMessage("");
+			}, 5000);
+		}
+		setAuthor("");
+		setTitle("");
+		setUrl("");
 	};
 
 	return (
