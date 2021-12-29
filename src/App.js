@@ -12,6 +12,7 @@ const App = () => {
 	const [user, setUser] = useState(null);
 	const [notificationMessage, setNotificationMessage] = useState("");
 	const [isErrorMessage, setIsErrorMessage] = useState(false);
+	const [showBlogForm, setShowBlogForm] = useState(false);
 
 	useEffect(() => {
 		blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -62,13 +63,24 @@ const App = () => {
 					/>
 					<p>{user.name} logged in</p>
 					<button onClick={logoutHandler}>Log out</button>
-          <h2>Create new</h2>
-					<BlogForm
-						blogs={blogs}
-						setBlogs={setBlogs}
-						setNotificationMessage={setNotificationMessage}
-						setIsErrorMessage={setIsErrorMessage}
-					/>
+					{showBlogForm ? (
+						<div>
+							<h2>Create new</h2>
+							<BlogForm
+								blogs={blogs}
+								setBlogs={setBlogs}
+								setNotificationMessage={setNotificationMessage}
+								setIsErrorMessage={setIsErrorMessage}
+							/>
+							<button onClick={() => setShowBlogForm(false)}>Cancel</button>
+						</div>
+					) : (
+						<div>
+							<button onClick={() => setShowBlogForm(true)}>
+								Create new blog
+							</button>
+						</div>
+					)}
 					<hr />
 					{blogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} />
