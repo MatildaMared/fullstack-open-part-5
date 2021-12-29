@@ -2,12 +2,23 @@
 	background-color: #eee;
 	border-radius: 8px;
 	border: 4px solid green;
-  font-size: 1.2rem;
-  color: green;
-  padding: .5rem;
+	font-size: 1.2rem;
+	color: green;
+	padding: 0.5rem;
 }
 
 .notification.error {
-  border-color: red;
-  color: red;
+	border-color: red;
+	color: red;
+}
+
+.blog {
+	border-radius: 0.5rem;
+	border: 2px solid #ddd;
+	padding: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.blog p {
+  margin: .5rem;
 }
