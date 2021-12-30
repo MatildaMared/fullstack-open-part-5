@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs, updateBlog }) => {
 	const [showDetails, setShowDetails] = useState(false);
 
 	const toggleShowDetails = () => {
 		setShowDetails(!showDetails);
 	};
 
-	const addLike = async (blog) => {
+	const likeHandler = () => {
 		const blogObj = {
 			user: blog.user.id,
 			likes: (blog.likes += 1),
@@ -17,11 +17,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 			title: blog.title,
 			url: blog.url,
 		};
-		const updatedBlog = await blogService.update(blog.id, blogObj);
-		const blogIndex = blogs.findIndex((b) => b.id === blog.id);
-		const newBlogsArray = [...blogs];
-		newBlogsArray[blogIndex] = updatedBlog;
-		setBlogs(newBlogsArray);
+		updateBlog(blog.id, blogObj);
 	};
 
 	const removeBlog = async (id) => {
@@ -46,7 +42,9 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 					<p className="blog__url">{blog.url}</p>
 					<p>
 						<span className="blog__likes">Likes: {blog.likes}</span>
-						<button onClick={() => addLike(blog)}>Like</button>
+						<button onClick={likeHandler} className="blog__likeBtn">
+							Like
+						</button>
 					</p>
 					<p className="blog__user">{blog.user.name}</p>
 					<button

@@ -35,6 +35,14 @@ const App = () => {
 		setSortedBlogs(sortedBlogs);
 	}, [blogs]);
 
+	const updateBlog = async (id, blogObj) => {
+		const updatedBlog = await blogService.update(id, blogObj);
+		const blogIndex = blogs.findIndex((b) => b.id === id);
+		const newBlogsArray = [...blogs];
+		newBlogsArray[blogIndex] = updatedBlog;
+		setBlogs(newBlogsArray);
+	};
+
 	const loginHandler = async (credentials) => {
 		try {
 			const response = await loginService.login(credentials);
@@ -91,7 +99,13 @@ const App = () => {
 					)}
 					<hr />
 					{sortedBlogs.map((blog) => (
-						<Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} />
+						<Blog
+							key={blog.id}
+							blog={blog}
+							setBlogs={setBlogs}
+							blogs={blogs}
+							updateBlog={updateBlog}
+						/>
 					))}
 				</section>
 			) : (

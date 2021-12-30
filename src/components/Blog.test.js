@@ -18,10 +18,19 @@ describe("<Blog /> component", () => {
 
 	const blogs = [];
 
-	const setBlogs = jest.fn();
+	const setBlogsMock = jest.fn();
+
+	const updateBlogMock = jest.fn();
 
 	beforeEach(() => {
-		component = render(<Blog blog={blog} blogs={blogs} setBlogs={setBlogs} />);
+		component = render(
+			<Blog
+				blog={blog}
+				blogs={blogs}
+				setBlogs={setBlogsMock}
+				updateBlog={updateBlogMock}
+			/>
+		);
 	});
 
 	test("renders title and author initially but not url or likes", () => {
@@ -46,5 +55,16 @@ describe("<Blog /> component", () => {
 
 		const likes = component.container.querySelector(".blog__likes");
 		expect(likes).toHaveTextContent(blog.likes);
+	});
+
+	test("clicking the like button calls the updateBlog function twice", () => {
+		const viewBtn = component.container.querySelector(".blog__viewBtn");
+		fireEvent.click(viewBtn);
+
+		const likeBtn = component.container.querySelector(".blog__likeBtn");
+		fireEvent.click(likeBtn);
+		fireEvent.click(likeBtn);
+
+		expect(updateBlogMock.mock.calls).toHaveLength(2);
 	});
 });
