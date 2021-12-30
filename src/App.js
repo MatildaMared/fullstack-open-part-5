@@ -9,6 +9,7 @@ import "./style.css";
 
 const App = () => {
 	const [blogs, setBlogs] = useState([]);
+	const [sortedBlogs, setSortedBlogs] = useState([]);
 	const [user, setUser] = useState(null);
 	const [notificationMessage, setNotificationMessage] = useState("");
 	const [isErrorMessage, setIsErrorMessage] = useState(false);
@@ -26,6 +27,13 @@ const App = () => {
 			blogService.setToken(user.token);
 		}
 	}, []);
+
+	useEffect(() => {
+		const sortedBlogs = blogs.sort((a, b) => {
+			return b.likes - a.likes;
+		});
+		setSortedBlogs(sortedBlogs);
+	}, [blogs]);
 
 	const loginHandler = async (credentials) => {
 		try {
@@ -82,7 +90,7 @@ const App = () => {
 						</div>
 					)}
 					<hr />
-					{blogs.map((blog) => (
+					{sortedBlogs.map((blog) => (
 						<Blog key={blog.id} blog={blog} setBlogs={setBlogs} blogs={blogs} />
 					))}
 				</section>
