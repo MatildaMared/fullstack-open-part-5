@@ -37,22 +37,33 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 		<>
 			{showDetails ? (
 				<div className="blog">
-					<p>
-						{blog.title} {blog.author}{" "}
-						<button onClick={toggleShowDetails}>Hide</button>
+					<p className="blog__details">
+						{blog.title} {blog.author}
 					</p>
-					<p>{blog.url}</p>
+					<button onClick={toggleShowDetails} className="blog__hideBtn">
+						Hide
+					</button>
+					<p className="blog__url">{blog.url}</p>
 					<p>
-						Likes: {blog.likes}{" "}
+						<span className="blog__likes">Likes: {blog.likes}</span>
 						<button onClick={() => addLike(blog)}>Like</button>
 					</p>
-					<p>{blog.user.name}</p>
-					<button onClick={() => removeBlog(blog.id)}>Remove</button>
+					<p className="blog__user">{blog.user.name}</p>
+					<button
+						onClick={() => removeBlog(blog.id)}
+						className="blog__removeBtn"
+					>
+						Remove
+					</button>
 				</div>
 			) : (
 				<div className="blog">
-					{blog.title} {blog.author}{" "}
-					<button onClick={toggleShowDetails}>View</button>
+					<p className="blog__details">
+						{blog.title} {blog.author}
+					</p>
+					<button onClick={toggleShowDetails} className="blog__viewBtn">
+						View
+					</button>
 				</div>
 			)}
 		</>
