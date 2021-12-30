@@ -18,9 +18,18 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 		};
 		const updatedBlog = await blogService.update(blog.id, blogObj);
 		const blogIndex = blogs.findIndex((b) => b.id === blog.id);
-    const newBlogsArray = [...blogs];
-    newBlogsArray[blogIndex] = updatedBlog;
+		const newBlogsArray = [...blogs];
+		newBlogsArray[blogIndex] = updatedBlog;
 		setBlogs(newBlogsArray);
+	};
+
+	const removeBlog = async (id) => {
+		if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+			await blogService.remove(id);
+
+			const updatedBlogs = blogs.filter((blog) => blog.id !== id);
+			setBlogs(updatedBlogs);
+		}
 	};
 
 	return (
@@ -29,6 +38,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 				<div className="blog">
 					<p>
 						{blog.title} {blog.author}{" "}
+						<button onClick={toggleShowDetails}>Hide</button>
 					</p>
 					<p>{blog.url}</p>
 					<p>
@@ -36,7 +46,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 						<button onClick={() => addLike(blog)}>Like</button>
 					</p>
 					<p>{blog.user.name}</p>
-					<button onClick={toggleShowDetails}>Hide</button>
+					<button onClick={() => removeBlog(blog.id)}>Remove</button>
 				</div>
 			) : (
 				<div className="blog">
