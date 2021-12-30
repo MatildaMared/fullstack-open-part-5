@@ -35,4 +35,16 @@ describe("<Blog /> component", () => {
 		const likes = component.container.querySelector(".blog__likes");
 		expect(likes).toBe(null);
 	});
+
+	test("renders url and number of likes when the view button has been clicked", () => {
+		const viewBtn = component.container.querySelector(".blog__viewBtn");
+
+		fireEvent.click(viewBtn);
+
+		const url = component.container.querySelector(".blog__url");
+		expect(url).toHaveTextContent(blog.url);
+
+		const likes = component.container.querySelector(".blog__likes");
+		expect(likes).toHaveTextContent(blog.likes);
+	});
 });
