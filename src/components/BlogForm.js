@@ -74,6 +74,6 @@ BlogForm.propTypes = {
 	setBlogs: PropTypes.func.isRequired,
 	setNotificationMessage: PropTypes.func.isRequired,
 	setIsErrorMessage: PropTypes.func.isRequired,
-}
+};
 
 export default BlogForm;
