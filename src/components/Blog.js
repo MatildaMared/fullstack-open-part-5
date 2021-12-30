@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
+import PropTypes from "prop-types";
 
 const Blog = ({ blog, blogs, setBlogs }) => {
 	const [showDetails, setShowDetails] = useState(false);
@@ -56,6 +57,12 @@ const Blog = ({ blog, blogs, setBlogs }) => {
 			)}
 		</>
 	);
+};
+
+Blog.propTypes = {
+	blog: PropTypes.object.isRequired,
+	blogs: PropTypes.array.isRequired,
+	setBlogs: PropTypes.func.isRequired,
 };
 
 export default Blog;
