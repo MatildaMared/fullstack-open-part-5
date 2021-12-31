@@ -35,6 +35,25 @@ const App = () => {
 		setSortedBlogs(sortedBlogs);
 	}, [blogs]);
 
+	const newBlog = async (title, author, url) => {
+		const newBlog = { title, author, url };
+		const createdBlog = await blogService.create(newBlog);
+		if (createdBlog.error) {
+			setNotificationMessage(createdBlog.error);
+			setIsErrorMessage(true);
+			setTimeout(() => {
+				setNotificationMessage("");
+				setIsErrorMessage(false);
+			}, 5000);
+		} else {
+			setBlogs([createdBlog, ...blogs]);
+			setNotificationMessage(`a new blog ${title} by ${author} added`);
+			setTimeout(() => {
+				setNotificationMessage("");
+			}, 5000);
+		}
+	};
+
 	const updateBlog = async (id, blogObj) => {
 		const updatedBlog = await blogService.update(id, blogObj);
 		const blogIndex = blogs.findIndex((b) => b.id === id);
@@ -83,6 +102,7 @@ const App = () => {
 						<div>
 							<h2>Create new</h2>
 							<BlogForm
+								newBlog={newBlog}
 								blogs={blogs}
 								setBlogs={setBlogs}
 								setNotificationMessage={setNotificationMessage}

@@ -1,46 +1,26 @@
 import React, { useState } from "react";
-import blogService from "./../services/blogs";
 import PropTypes from "prop-types";
 
-const BlogForm = ({
-	blogs,
-	setBlogs,
-	setNotificationMessage,
-	setIsErrorMessage,
-}) => {
+const BlogForm = ({ newBlog }) => {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [url, setUrl] = useState("");
 
-	const newBlogHandler = async (e) => {
+	const newBlogHandler = (e) => {
 		e.preventDefault();
-		const newBlog = { title, author, url };
-		const createdBlog = await blogService.create(newBlog);
-		if (createdBlog.error) {
-			setNotificationMessage(createdBlog.error);
-			setIsErrorMessage(true);
-			setTimeout(() => {
-				setNotificationMessage("");
-				setIsErrorMessage(false);
-			}, 5000);
-		} else {
-			setBlogs([createdBlog, ...blogs]);
-			setNotificationMessage(`a new blog ${title} by ${author} added`);
-			setTimeout(() => {
-				setNotificationMessage("");
-			}, 5000);
-		}
-		setAuthor("");
+		newBlog(title, author, url);
 		setTitle("");
+		setAuthor("");
 		setUrl("");
 	};
 
 	return (
-		<form onSubmit={newBlogHandler}>
+		<form className="form" onSubmit={newBlogHandler}>
 			<div>
 				<label htmlFor="title">Title: </label>
 				<input
 					type="text"
+					id="title"
 					name="title"
 					value={title}
 					onChange={(e) => setTitle(e.target.value)}
@@ -50,6 +30,7 @@ const BlogForm = ({
 				<label htmlFor="author">Author: </label>
 				<input
 					type="text"
+					id="author"
 					name="author"
 					value={author}
 					onChange={(e) => setAuthor(e.target.value)}
@@ -59,21 +40,21 @@ const BlogForm = ({
 				<label htmlFor="url">Url: </label>
 				<input
 					type="text"
+					id="url"
 					name="url"
 					value={url}
 					onChange={(e) => setUrl(e.target.value)}
 				/>
 			</div>
-			<button type="submit">Create</button>
+			<button type="submit" className="form__submitBtn">
+				Create
+			</button>
 		</form>
 	);
 };
 
 BlogForm.propTypes = {
-	blogs: PropTypes.array.isRequired,
-	setBlogs: PropTypes.func.isRequired,
-	setNotificationMessage: PropTypes.func.isRequired,
-	setIsErrorMessage: PropTypes.func.isRequired,
+	newBlog: PropTypes.func.isRequired,
 };
 
 export default BlogForm;
