@@ -37,4 +37,24 @@ describe("Blog app", function () {
 				.and("have.css", "color", "rgb(255, 0, 0)");
 		});
 	});
+
+	describe("When logged in", function () {
+		beforeEach(function () {
+			cy.get("#username").type("matilda");
+			cy.get("#password").type("test1234");
+			cy.get("#loginBtn").click();
+		});
+
+		it("A blog can be created", function () {
+			cy.contains("Create new blog").click();
+
+			cy.get("#title").type("A new blog");
+			cy.get("#author").type("Author");
+			cy.get("#url").type("Url");
+
+			cy.get("#createBlogBtn").click();
+
+			cy.contains("A new blog");
+		});
+	});
 });
