@@ -56,5 +56,37 @@ describe("Blog app", function () {
 
 			cy.contains("A new blog");
 		});
+
+		describe("When there are several blogs", function () {
+			beforeEach(function () {
+				cy.contains("Create new blog").click();
+
+				cy.get("#title").type("A first blog");
+				cy.get("#author").type("Author");
+				cy.get("#url").type("Url");
+				cy.get("#createBlogBtn").click();
+
+				cy.get("#title").type("A second blog");
+				cy.get("#author").type("Author");
+				cy.get("#url").type("Url");
+				cy.get("#createBlogBtn").click();
+
+				cy.get("#title").type("A third blog");
+				cy.get("#author").type("Author");
+				cy.get("#url").type("Url");
+				cy.get("#createBlogBtn").click();
+			});
+
+			it("A blog can be liked", function () {
+				cy.contains("A second blog Author")
+					.parent()
+					.find(".blog__viewBtn")
+					.click();
+
+				cy.get(".blog__likeBtn").click().click().click();
+
+				cy.contains("Likes: 3");
+			});
+		});
 	});
 });
