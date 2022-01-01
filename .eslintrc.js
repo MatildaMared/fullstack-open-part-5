@@ -4,6 +4,7 @@ module.exports = {
 		browser: true,
 		es6: true,
 		jest: true,
+		cypress: true,
 	},
 	extends: ["eslint:recommended", "plugin:react/recommended"],
 	parserOptions: {
