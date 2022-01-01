@@ -40,9 +40,13 @@ describe("Blog app", function () {
 
 	describe("When logged in", function () {
 		beforeEach(function () {
-			cy.get("#username").type("matilda");
-			cy.get("#password").type("test1234");
-			cy.get("#loginBtn").click();
+			cy.request("POST", "http://localhost:3003/api/login", {
+				username: "matilda",
+				password: "test1234",
+			}).then((response) => {
+				localStorage.setItem("blogUser", JSON.stringify(response.body));
+				cy.visit("http://localhost:3000");
+			});
 		});
 
 		it("A blog can be created", function () {
@@ -59,17 +63,28 @@ describe("Blog app", function () {
 
 		describe("When there are several blogs", function () {
 			beforeEach(function () {
-				cy.contains("Create new blog").click();
+				cy.createBlog({
+					title: "A first blog",
+					author: "Author",
+					url: "Url",
+					likes: 5,
+				});
 
-				cy.get("#title").type("A first blog");
-				cy.get("#author").type("Author");
-				cy.get("#url").type("Url");
-				cy.get("#createBlogBtn").click();
+				cy.createBlog({
+					title: "A second blog",
+					author: "Author",
+					url: "Url",
+					likes: 15,
+				});
 
-				cy.get("#title").type("A second blog");
-				cy.get("#author").type("Author");
-				cy.get("#url").type("Url");
-				cy.get("#createBlogBtn").click();
+				cy.createBlog({
+					title: "A third blog",
+					author: "Author",
+					url: "Url",
+					likes: 3,
+				});
+
+				cy.visit("http://localhost:3000");
 			});
 
 			it("A blog can be liked", function () {
@@ -78,9 +93,9 @@ describe("Blog app", function () {
 					.find(".blog__viewBtn")
 					.click();
 
-				cy.get(".blog__likeBtn").click().click().click();
+				cy.get(".blog__likeBtn").click();
 
-				cy.contains("Likes: 3");
+				cy.contains("Likes: 16");
 			});
 
 			it("A blog can be deleted by its creator", function () {
@@ -93,6 +108,26 @@ describe("Blog app", function () {
 				cy.on("windows:confirm", () => true);
 
 				cy.contains("A second blog Author").should("not.exist");
+			});
+
+			it("Blogs are sorted so the first blog has most likes", function () {
+				cy.createBlog({
+					title: "Blog with most likes",
+					author: "Author",
+					url: "Url",
+					likes: 25,
+				}).then(function () {
+					cy.visit("http://localhost:3000");
+					cy.get(".blog__viewBtn").eq(0).click();
+					cy.get(".blog__viewBtn").eq(0).click();
+					cy.get(".blog__viewBtn").eq(0).click();
+					cy.get(".blog__viewBtn").eq(0).click();
+
+					cy.get(".blog").eq(0).contains("Likes: 25");
+					cy.get(".blog").eq(1).contains("Likes: 15");
+					cy.get(".blog").eq(2).contains("Likes: 5");
+					cy.get(".blog").eq(3).contains("Likes: 3");
+				});
 			});
 		});
 	});
