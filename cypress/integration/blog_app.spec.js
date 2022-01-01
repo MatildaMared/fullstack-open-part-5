@@ -70,11 +70,6 @@ describe("Blog app", function () {
 				cy.get("#author").type("Author");
 				cy.get("#url").type("Url");
 				cy.get("#createBlogBtn").click();
-
-				cy.get("#title").type("A third blog");
-				cy.get("#author").type("Author");
-				cy.get("#url").type("Url");
-				cy.get("#createBlogBtn").click();
 			});
 
 			it("A blog can be liked", function () {
@@ -86,6 +81,18 @@ describe("Blog app", function () {
 				cy.get(".blog__likeBtn").click().click().click();
 
 				cy.contains("Likes: 3");
+			});
+
+			it("A blog can be deleted by its creator", function () {
+				cy.contains("A second blog Author")
+					.parent()
+					.find(".blog__viewBtn")
+					.click();
+
+				cy.get(".blog__removeBtn").click();
+				cy.on("windows:confirm", () => true);
+
+				cy.contains("A second blog Author").should("not.exist");
 			});
 		});
 	});
